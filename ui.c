@@ -2,7 +2,7 @@
 
 #define UI_LINUX
 #define UI_IMPLEMENTATION
-#include "libs/luigi.h"
+#include "lib/luigi.h"
 
 UIWindow *window;
 

@@ -11,6 +11,6 @@
 
 #define DDCUTIL_VMAJOR  2
 #define DDCUTIL_VMINOR  2
-#define DDCUTIL_VMICRO  0
+#define DDCUTIL_VMICRO  1
 #define DDCUTIL_VSUFFIX dev
 

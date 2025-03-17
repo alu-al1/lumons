@@ -7,7 +7,7 @@
  *  within the code that implements the API.
  */
 
-// Copyright (C) 2014-2024 Sanford Rockowitz <rockowitz@minsoft.com>
+// Copyright (C) 2014-2025 Sanford Rockowitz <rockowitz@minsoft.com>
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #ifndef DDCUTIL_TYPES_H_
@@ -538,7 +538,7 @@ typedef enum {
    DDCA_EVENT_DPMS_ASLEEP,
    DDCA_EVENT_DISPLAY_CONNECTED,
    DDCA_EVENT_DISPLAY_DISCONNECTED,
-   DDCA_EVENT_UNUSED1,
+   DDCA_EVENT_DDC_ENABLED,
    DDCA_EVENT_UNUSED2,
 } DDCA_Display_Event_Type;
 
@@ -555,7 +555,7 @@ typedef enum {
    DDCA_EVENT_CLASS_UNUSED1            = 4,
 } DDCA_Display_Event_Class;
 
-#define DDCA_EVENT_CLASS_ALL (DDCA_EVENT_CLASS_DPMS | DDCA_EVENT_CLASS_DISPLAY_CONNECTION)
+#define DDCA_EVENT_CLASS_ALL ((DDCA_Display_Event_Class)(DDCA_EVENT_CLASS_DPMS | DDCA_EVENT_CLASS_DISPLAY_CONNECTION))
 
 
 /** Event record passed by a display status callback function.
@@ -567,18 +567,25 @@ typedef enum {
  *  maximum of 31 printable characters and a termination byte.
  *
  *  @remark
- *  The DDCA_Display_Status_Event is defined with two unused fields to allow
+ *  The DDCA_Display_Status_Event is defined with unused fields at the end to allow
  *  for future extension without breaking the ABI.
  *
  *  @since 2.1.0
+ *
+ *  @remark
+ *  Field flags with bit DDCA_DISPLAY_EVENT_DDC_WORKING added in 2.2.0
  */
+
+#define DDCA_DISPLAY_EVENT_DDC_WORKING 0x08
+
 typedef struct {
    uint64_t                timestamp_nanos;
    DDCA_Display_Event_Type event_type;
    DDCA_IO_Path            io_path;
    char                    connector_name[32];
    DDCA_Display_Ref        dref;
-   void *                  unused[2];
+   uint8_t                 flags;
+   void *                  unused[1];
 } DDCA_Display_Status_Event;
 
 
@@ -600,6 +607,32 @@ typedef
 void (*DDCA_Display_Status_Callback_Func)(DDCA_Display_Status_Event event);
 
 
+
+/** Parameter record for tuning watching display connection changes.
+ *
+ *  @remark
+ *  This struct is defined with unused fields at the end to allow for future
+ *  extension without breaking the ABI.
+ *
+ *  @since 2.2.0
+ */
+//! @remark see init_display_watch_options() for consideration of what to add
+typedef struct {
+   // Polling loop intervals for each of the watch modes
+   uint16_t   xevent_watch_interval_millisec;   /**< For watch mode XEVENT */
+   uint16_t   poll_watch_interval_millisec;     /**< For watch mode POLL */
+
+   // Once an event is received that possibly indicates a display change, libddcutil
+   // repeatedly checks /sys/class/drm until the reported displays stabilize
+   uint16_t  initial_stabilization_millisec; /**< Delay before first_initialization check */
+   uint16_t  stabilization_poll_millisec;    /**< Polling interval between stabilization checks */
+
+   // Interval at which to check that DDC has become enabled if it is not
+   // immediately enabled when the EDID is detected.
+   uint16_t   watch_retry_interval_millisec;
+
+   void *  unused[4];
+} DDCA_DW_Settings;
 
 #ifdef __cplusplus
 }
