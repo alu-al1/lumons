@@ -1,7 +1,7 @@
 #include "stdio.h" //TODO exclude if not used
 #include "stdlib.h" //TODO exclude if not used
 
-#include "ui.h"
+#include "ui/ui.h"
 #include "core.h"
 
 inline static void init() {
@@ -10,7 +10,7 @@ inline static void init() {
 }
 
 inline static void  destroy() {
-  mon_cleanup();
+  // mon_cleanup();
 }
 
 int main() {

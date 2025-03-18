@@ -53,10 +53,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+lumons
+
 info
 *.info
 
 dev
 todo
 
-brlev
+set_brightness.sh

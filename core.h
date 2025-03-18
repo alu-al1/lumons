@@ -12,14 +12,9 @@ void mon_cleanup();
 // void load_ddcutil();
 // void unload_ddcutil_s();
 
-typedef struct {
-    DDCA_Display_Ref *display_ref;  // Pointer to DDCA_Display_Ref
-    bool active;                   // Status if display is active
-    bool available;                // Status if display is available
-    void *id;                      // Pointer to some identifier or data related to display
-} DisplayData;
+
 
 //interface-like
-typedef DisplayData** (*i_get_displays_data_fp) ();
+// typedef DisplayData** (*i_get_displays_data_fp) ();
 
 #endif // CORE_H

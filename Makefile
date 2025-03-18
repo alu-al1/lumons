@@ -19,10 +19,10 @@ LDFLAGS = -L$(LIB_DIR) -L$(LIB_DIR_DDCUTIL) -lddcutil  -lX11 -lm
 
 
 # Output Binary
-TARGET = brlev
+TARGET = lumons
 
 # Source files
-SRC = main.c utils.c core.c ui.c
+SRC = main.c glue.c core.c utils.c ui/ui.c
 
 # Object files
 OBJ = $(SRC:.c=.o)
